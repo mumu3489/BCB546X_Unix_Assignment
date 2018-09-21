@@ -152,19 +152,44 @@ or just looking at the number of lines of each file:
 	`cut -f2 snp_teosinte_joined_unknownPosition.txt`  
 	`cut -f2,3 snp_teosinte_joined_MultiPosition.txt`  
 	- Headers were included, results are correct by looking at the how many lines for each in original joined file: (multiple was counted as multiple chromosomes and multiple positions in the same chromosomes)   
-  
     28 `snp_maize_joined_unknownPosition.txt`  
     18 `snp_maize_joined_MultiPosition.txt `  
     28 `snp_teosinte_joined_unknownPosition.txt`  
     18 `snp_teosinte_joined_MultiPosition.txt`  
     92 `total`  
+
+	`cut -f2,3 maize_results/snp_maize_joined_MultiPosition.txt | sort -k1,1n | column -t`  
+	- To check the details of multiple SNPs
+Chromosome  Position  
+multiple  
+multiple  
+multiple  
+multiple  
+multiple  
+multiple  
+2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; multiple  
+4 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; multiple  
+4 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; multiple  
+4 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; multiple  
+6 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; multiple  
+6 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; multiple  
+6 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; multiple  
+7 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; multiple  
+9 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; multiple  
+9 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; multiple  
+9 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; multiple  
   
 14. Orginize files by creating results folder for maize and teosinte separately.  
 	`mkdir maize_results teosinte_results source_files`  
 	`mv snp_maize_joined_*.txt maize_results`  
 	`mv snp_teosinte_joined_*.txt teosinte_results`  
 	`mv fang_et_al_genotypes.txt snp_position.txt source_files`  
+  
+15. Make up: to remove SNPs that matches multiple positions in a fixed chromosome from all Chr1-Chr10 files. (SNPs that matching multiple position in for example chr1 was included in chr1 files, so this step is a make-up to remove those using `for loop`)  
+	`for j in "maize" "teosinte"; do for ((i=1;i<=10; i+=1)); do sed -i '/multiple/d' *_results/snp_"$j"_joined_chr"$i"_*.txt; done; done `  
 
+	- Check by word counts for each file:  
+	`for j in "maize" "teosinte"; do for ((i=1;i<=10; i+=1)); do wc *_results/snp_"$j"_joined_chr"$i"_*.txt; done; done | sort -k4,4 | column -t  
 
-
+	- The results show that Chr2 and 7 reduced one line, and Chr4,6,and 9 reduced 3 lines. So the multiple position SNPs in there chromosomes are removed.  
 
